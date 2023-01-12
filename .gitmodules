@@ -1,0 +1,3 @@
+[submodule "http-servor/http-servor/extern_lib/logger"]
+	path = http-servor/http-servor/extern_lib/logger
+	url = https://github.com/davidporras31/logger.git
