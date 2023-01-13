@@ -100,7 +100,7 @@ void TCPServor::start()
 					this->resive(ClientSocket, recvbuf, iResult);
 				}
 				else if (iResult == 0)
-					this->subLogger->log(LoggerGravity::INFO, "Connection closing...");
+				{ }//this->subLogger->log(LoggerGravity::INFO, "Connection closing...");
 				else {
 					this->subLogger->log(LoggerGravity::ERROR, "recv failed");
 					win::closesocket(ClientSocket);
