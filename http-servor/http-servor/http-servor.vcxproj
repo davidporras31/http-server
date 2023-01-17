@@ -155,16 +155,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="extern_lib\logger\src\Logger.cpp" />
-    <ClCompile Include="extern_lib\logger\src\SubLogger.cpp" />
+    <ClCompile Include="extern_lib\logger\Logger.cpp" />
+    <ClCompile Include="extern_lib\logger\SubLogger.cpp" />
     <ClCompile Include="http-servor.cpp" />
     <ClCompile Include="HttpServor.cpp" />
     <ClCompile Include="TCPServor.cpp" />
     <ClCompile Include="TCPServorControler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="extern_lib\logger\include\Logger.h" />
-    <ClInclude Include="extern_lib\logger\include\SubLogger.h" />
+    <ClInclude Include="extern_lib\logger\Logger.h" />
+    <ClInclude Include="extern_lib\logger\SubLogger.h" />
     <ClInclude Include="HttpServor.h" />
     <ClInclude Include="TCPServor.h" />
     <ClInclude Include="TCPServorControler.h" />

@@ -36,10 +36,10 @@
     <ClCompile Include="TCPServor.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="extern_lib\logger\src\Logger.cpp">
+    <ClCompile Include="extern_lib\logger\Logger.cpp">
       <Filter>Fichiers sources\extern_lib\logger</Filter>
     </ClCompile>
-    <ClCompile Include="extern_lib\logger\src\SubLogger.cpp">
+    <ClCompile Include="extern_lib\logger\SubLogger.cpp">
       <Filter>Fichiers sources\extern_lib\logger</Filter>
     </ClCompile>
     <ClCompile Include="TCPServorControler.cpp">
@@ -53,10 +53,10 @@
     <ClInclude Include="TCPServor.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="extern_lib\logger\include\Logger.h">
+    <ClInclude Include="extern_lib\logger\Logger.h">
       <Filter>Fichiers d%27en-tête\extern_lib\logger</Filter>
     </ClInclude>
-    <ClInclude Include="extern_lib\logger\include\SubLogger.h">
+    <ClInclude Include="extern_lib\logger\SubLogger.h">
       <Filter>Fichiers d%27en-tête\extern_lib\logger</Filter>
     </ClInclude>
     <ClInclude Include="TCPServorControler.h">
