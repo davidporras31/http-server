@@ -6,6 +6,8 @@ TCPServor::TCPServor()
 	this->ListenSocket = INVALID_SOCKET;
 	this->subLogger = nullptr;
 	this->tCPServorControler = TCPServorControler();
+	this->port = 80;
+	this->bufferSize = 512;
 }
 
 void TCPServor::init()
@@ -23,8 +25,6 @@ void TCPServor::init()
 	// Initialize Addrinfo
 	this->subLogger->log(LoggerGravity::INFO, "get local address");
 
-#define DEFAULT_PORT "80"
-
 	struct win::addrinfo* result = NULL, * ptr = NULL, hints;
 
 	ZeroMemory(&hints, sizeof(hints));
@@ -34,7 +34,7 @@ void TCPServor::init()
 	hints.ai_flags = AI_PASSIVE;
 
 	// Resolve the local address and port to be used by the server
-	iResult = win::getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+	iResult = win::getaddrinfo(NULL, std::to_string(this->port).data(), &hints, &result);
 	if (iResult != 0) {
 		this->subLogger->log(LoggerGravity::FATAL, "getaddrinfo failed");
 		win::WSACleanup();
@@ -86,16 +86,18 @@ void TCPServor::start()
 		int sinsize = sizeof(csin);
 		if ((ClientSocket = win::accept(ListenSocket, (win::SOCKADDR*)&csin, &sinsize)) != INVALID_SOCKET)
 		{
-#define DEFAULT_BUFLEN 1024
-
-			char recvbuf[DEFAULT_BUFLEN];
+			char * recvbuf = new char[this->bufferSize];
 			int iResult;// , iSendResult;
-			int recvbuflen = DEFAULT_BUFLEN;
+			int recvbuflen = this->bufferSize;
 
 			// Receive until the peer shuts down the connection
 			do {
 
 				iResult = win::recv(ClientSocket, recvbuf, recvbuflen, 0);
+				/*if (win::WSAGetLastError() == WSAEMSGSIZE) {
+					this->subLogger->log(LoggerGravity::ERROR, "packet overflow");
+				}*/
+				
 				if (iResult > 0) {
 					this->resive(ClientSocket, recvbuf, iResult);
 				}
@@ -133,4 +135,14 @@ SubLogger* TCPServor::getSublogger()
 TCPServorControler* TCPServor::getControler()
 {
 	return &this->tCPServorControler;
+}
+
+void TCPServor::setPort(uint16_t number)
+{
+	this->port = number;
+}
+
+void TCPServor::setBufferSize(size_t size)
+{
+	this->bufferSize = size;
 }

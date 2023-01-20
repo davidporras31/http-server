@@ -32,10 +32,15 @@ public:
 	SubLogger* getSublogger();
 	TCPServorControler* getControler();
 
+	void setPort(uint16_t number);
+	void setBufferSize(size_t size);
+
 private:
 	TCPServorControler tCPServorControler;
 	win::WSADATA wsaData;
 	SubLogger * subLogger;
 	win::SOCKET ListenSocket;
+	uint16_t port;
+	size_t bufferSize;
 };
 
