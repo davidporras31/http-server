@@ -88,7 +88,7 @@ void TCPServor::start()
 		{
 			char * recvbuf = new char[this->bufferSize];
 			int iResult;// , iSendResult;
-			int recvbuflen = this->bufferSize;
+			int recvbuflen = int(this->bufferSize);
 
 			// Receive until the peer shuts down the connection
 			do {
