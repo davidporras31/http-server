@@ -4,6 +4,16 @@ HttpServor::HttpServor()
 {
 }
 
+ServorDescritor HttpServor::getServorDescritor()
+{
+	return this->servorDescritor;
+}
+
+void HttpServor::setServorDescritor(ServorDescritor servorDescritor)
+{
+	this->servorDescritor = servorDescritor;
+}
+
 bool HttpServor::asDataFild(std::string methode)
 {
 	bool ret = false;
@@ -30,26 +40,10 @@ bool HttpServor::asDataFild(std::string methode)
 
 std::string HttpServor::generateTram(size_t length)
 {
-	auto format = "%D, %d %M %a %h : %m : %s";
-	std::time_t now = std::time(0);
-	std::tm gmt;
-	gmtime_s(&gmt,&now);
-	char buffer[80];
-
-	strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", &gmt);
-	std::string snow(buffer);
-
-	return std::string() + "HTTP / 1.0 200 OK\n" +
-		"Date : " + snow + " GMT\n" +
-		"Server : " + ServerName + " / " + Version + "\n" +
-		"Content - Type : text / html\n" +
-		"Content - Length : " + std::to_string(length) + "\n" +
-		"Expires : Sat, 01 Jan 2000 00 : 59 : 59 GMT\n" +
-		"Last - modified : Fri, 09 Aug 1996 14:21 : 40 GMT\n" +
-		"\n";
+	return sendTram(this->servorDescritor, length);
 }
 
-int HttpServor::send(win::SOCKET socket, std::string* data)
+int HttpServor::sendData(win::SOCKET socket, std::string* data)
 {
 	std::string tram = generateTram(data->length()) + *data;
 	char* cdata = new char[tram.length() + 1];

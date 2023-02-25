@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include "./TCPServor.h"
-#include <time.h>
-#include <iomanip>
-#include <sstream>
+#include "./ServorDescritor.h"
+#include "./TramGenerator.h"
 class HttpServor : public TCPServor
 {
 public :
@@ -17,14 +16,16 @@ public :
 	virtual void PATCH(win::SOCKET socket, std::string* path, std::string* data) = 0;
 	virtual void DELETE(win::SOCKET socket, std::string* path, std::string* data) = 0;
 
+	ServorDescritor getServorDescritor();
+	void setServorDescritor(ServorDescritor servorDescritor);
+
 	static bool asDataFild(std::string methode);
 	std::string generateTram(size_t length);
 
-	int send(win::SOCKET socket, std::string* data);
+	int sendData(win::SOCKET socket, std::string* data);
 	// Hérité via TCPServor
 	virtual void resive(win::SOCKET socket, char* data, size_t size) override;
 private:
-	const std::string ServerName = "HttpServor";
-	const std::string Version = "1.0";
+	ServorDescritor servorDescritor;
 };
 

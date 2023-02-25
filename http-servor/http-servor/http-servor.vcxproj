@@ -159,15 +159,19 @@
     <ClCompile Include="extern_lib\logger\SubLogger.cpp" />
     <ClCompile Include="http-servor.cpp" />
     <ClCompile Include="HttpServor.cpp" />
+    <ClCompile Include="ServorDescritor.cpp" />
     <ClCompile Include="TCPServor.cpp" />
     <ClCompile Include="TCPServorControler.cpp" />
+    <ClCompile Include="TramGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern_lib\logger\Logger.h" />
     <ClInclude Include="extern_lib\logger\SubLogger.h" />
     <ClInclude Include="HttpServor.h" />
+    <ClInclude Include="ServorDescritor.h" />
     <ClInclude Include="TCPServor.h" />
     <ClInclude Include="TCPServorControler.h" />
+    <ClInclude Include="TramGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

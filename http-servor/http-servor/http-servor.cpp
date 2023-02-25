@@ -7,7 +7,7 @@ public:
 	// Hérité via HttpServor
 	virtual void GET(win::SOCKET socket, std::string* path, std::string* data) override
 	{
-		this->send(socket, new std::string("<title>Exemple</title>\n\
+		this->sendData(socket, new std::string("<title>Exemple</title>\n\
 <p> Ceci est une page d'exemple.</p>"));
 		//win::closesocket(socket);
 		win::shutdown(socket, SD_SEND);
@@ -42,6 +42,7 @@ int main()
 	Logger logger;
 	logger.log(LoggerGravity::INFO, "application starting");
 	ImpServor currentServor;
+	currentServor.setServorDescritor(ServorDescritor("HTTPServor","1.0"));
 	currentServor.setLogger(&logger);
 	currentServor.init();
 	currentServor.start();
