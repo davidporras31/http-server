@@ -10,6 +10,11 @@ TCPServor::TCPServor()
 	this->bufferSize = 512;
 }
 
+TCPServor::~TCPServor()
+{
+	this->subLogger->dump();
+}
+
 void TCPServor::init()
 {
 	this->subLogger->log(LoggerGravity::INFO, "init");
@@ -110,7 +115,7 @@ void TCPServor::start()
 					return ;
 				}
 
-			} while (iResult > 0);
+			} while (iResult > 0 && !this->tCPServorControler.isClosingServor());
 		}
 	}
 	win::closesocket(ListenSocket);

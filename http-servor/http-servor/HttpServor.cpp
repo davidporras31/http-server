@@ -2,6 +2,7 @@
 
 HttpServor::HttpServor()
 {
+	this->servorDescritor = ServorDescritor("HttpServer", "1.0");
 }
 
 ServorDescritor HttpServor::getServorDescritor()

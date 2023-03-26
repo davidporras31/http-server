@@ -22,6 +22,7 @@ class TCPServor
 {
 public:
 	TCPServor();
+	~TCPServor();
 	void init();
 	void start();
 
