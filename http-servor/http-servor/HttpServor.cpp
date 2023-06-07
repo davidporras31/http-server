@@ -44,19 +44,20 @@ std::string HttpServor::generateTram(size_t length)
 	return sendTram(this->servorDescritor, length);
 }
 
-int HttpServor::sendData(win::SOCKET socket, std::string* data)
+int HttpServor::sendData(sf::TcpSocket * socket, std::string* data)
 {
 	std::string tram = generateTram(data->length()) + *data;
 	char* cdata = new char[tram.length() + 1];
 	strcpy_s(cdata, sizeof(char) * (tram.length() + 1), tram.c_str());
-	return TCPServor::send(socket, cdata, tram.length());
+	return socket->send( cdata, tram.length());
 }
 
-void HttpServor::resive(win::SOCKET socket, char* data, size_t size)
+void HttpServor::resive(sf::TcpSocket * socket, char* data, size_t size)
 {
 	std::string val(data,size);
 	std::string methode = val.substr(0, val.find(" "));
-	std::string path = val.substr(methode.length() + 1, val.length()).substr(0, val.find(" ") - 2);
+	std::string path = val.substr(methode.length() + 1, val.length());
+	path = path.substr(0, path.find(" "));
 	std::string sdata;
 
 	if (asDataFild(methode)) {

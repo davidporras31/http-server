@@ -1,21 +1,16 @@
 #pragma once
+#ifdef WIN32
+#include <basetsd.h>
+#endif // WIN32
+
+#include <SFML/Network/TcpListener.hpp>
+#include <SFML/Network/TcpSocket.hpp>
+#include <SFML/Network/SocketSelector.hpp>
+#include <SFML/System/Clock.hpp>
 #include "extern_lib/logger/SubLogger.h"
 #include "TCPServorControler.h"
-#if defined(_WIN64) || defined(_WIN32)
-namespace win {
-#include <winsock2.h>
-#include <ws2tcpip.h>
-}
-#undef INVALID_SOCKET
-#define INVALID_SOCKET		(win::SOCKET)(~0)
-#undef MAKEWORD
-#define MAKEWORD(a, b)      ((win::WORD)(((win::BYTE)(((win::DWORD_PTR)(a)) & 0xff)) | ((win::WORD)((win::BYTE)(((win::DWORD_PTR)(b)) & 0xff))) << 8))
-#include <stdio.h>
-#undef ERROR
-#undef DELETE
-
-#pragma comment(lib, "Ws2_32.lib")
-#endif // Windows
+#include <string>
+#include <vector>
 
 
 class TCPServor
@@ -26,22 +21,27 @@ public:
 	void init();
 	void start();
 
-	int send(win::SOCKET socket, char* data, std::size_t size);
-	virtual void resive(win::SOCKET socket, char* data,size_t size) = 0;
+	virtual void resive(sf::TcpSocket * socket, char* data,size_t size) = 0;
 
 	void setLogger(Logger* logger);
 	SubLogger* getSublogger();
 	TCPServorControler* getControler();
 
-	void setPort(uint16_t number);
+	void setPort(unsigned short number);
 	void setBufferSize(size_t size);
+	void setTimeout(unsigned int timeout);
+	void setWaitTime(unsigned int waitTime);
 
 private:
+	void removeConnectedClient(std::vector<std::pair<sf::TcpSocket*, sf::Time>*>* connectedClient, sf::SocketSelector* selector, size_t i);
+
 	TCPServorControler tCPServorControler;
-	win::WSADATA wsaData;
+
 	SubLogger * subLogger;
-	win::SOCKET ListenSocket;
-	uint16_t port;
+	sf::TcpListener listener;
+	unsigned short port;
 	size_t bufferSize;
+	unsigned int timeout;
+	unsigned int waitTime;
 };
 

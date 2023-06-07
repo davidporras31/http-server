@@ -6,15 +6,15 @@ class HttpServor : public TCPServor
 {
 public :
 	HttpServor();
-	virtual void GET(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void HEAD(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void POST(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void OPTIONS(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void CONNECT(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void TRACE(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void PUT(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void PATCH(win::SOCKET socket, std::string* path, std::string* data) = 0;
-	virtual void DELETE(win::SOCKET socket, std::string* path, std::string* data) = 0;
+	virtual void GET(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void HEAD(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void POST(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void OPTIONS(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void CONNECT(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void TRACE(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void PUT(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void PATCH(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
+	virtual void DELETE(sf::TcpSocket * socket, std::string* path, std::string* data) = 0;
 
 	ServorDescritor getServorDescritor();
 	void setServorDescritor(ServorDescritor servorDescritor);
@@ -22,9 +22,9 @@ public :
 	static bool asDataFild(std::string methode);
 	std::string generateTram(size_t length);
 
-	int sendData(win::SOCKET socket, std::string* data);
+	int sendData(sf::TcpSocket * socket, std::string* data);
 	// Hérité via TCPServor
-	virtual void resive(win::SOCKET socket, char* data, size_t size) override;
+	virtual void resive(sf::TcpSocket * socket, char* data, size_t size) override;
 private:
 	ServorDescritor servorDescritor;
 };
