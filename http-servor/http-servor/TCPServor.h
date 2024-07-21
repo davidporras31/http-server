@@ -11,6 +11,7 @@
 #include "TCPServorControler.h"
 #include <string>
 #include <vector>
+#include <thread>
 
 
 class TCPServor
@@ -35,10 +36,16 @@ public:
 private:
 	void removeConnectedClient(std::vector<std::pair<sf::TcpSocket*, sf::Time>*>* connectedClient, sf::SocketSelector* selector, size_t i);
 
+	void newClientAcceptThread();
+
 	TCPServorControler tCPServorControler;
 
 	SubLogger * subLogger;
 	sf::TcpListener listener;
+	sf::SocketSelector selector;
+	std::vector<std::pair<sf::TcpSocket*, sf::Time>*> connectedClient;
+
+	sf::Clock serverStart;
 	unsigned short port;
 	size_t bufferSize;
 	unsigned int timeout;

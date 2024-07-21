@@ -13,6 +13,7 @@ TCPServor::TCPServor()
 TCPServor::~TCPServor()
 {
 	this->subLogger->dump();
+	this->listener.close();
 }
 
 void TCPServor::init()
@@ -31,32 +32,14 @@ void TCPServor::init()
 void TCPServor::start()
 {
 	this->subLogger->log(LoggerGravity::INFO, "Sarting servor");
-	sf::SocketSelector selector;
-	sf::Time ttimeout = sf::milliseconds(sf::Int64(this->timeout));
 	sf::Time twaittime = sf::microseconds(sf::Int64(this->waitTime));
-	sf::Clock serverStart;
-	std::vector<std::pair<sf::TcpSocket*,sf::Time>*> connectedClient;
+	std::thread f(&TCPServor::newClientAcceptThread,this);
 
 	while (!this->tCPServorControler.isClosingServor())
 	{
-		// Wait for a client to connect
-		sf::TcpSocket client;
-		switch(listener.accept(client))
-		{
-		case sf::Socket::NotReady:
-			//no
-			break;
-		case sf::Socket::Error:
-			this->getSublogger()->log(ERROR, "Failed to accept connection");
-			break;
-		case sf::Socket::Done:
-			selector.add(client);
-			connectedClient.push_back(new std::pair<sf::TcpSocket*, sf::Time>(& client,serverStart.getElapsedTime()));
-			break;
-		}
 		for (size_t i = 0; i < connectedClient.size(); i++)
 		{
-			if(serverStart.getElapsedTime() < connectedClient.at(i)->second + ttimeout)
+			if(serverStart.getElapsedTime() < connectedClient.at(i)->second)
 			{
 				this->removeConnectedClient(&connectedClient, &selector, i);
 			}
@@ -67,7 +50,7 @@ void TCPServor::start()
 			{
 				if (selector.isReady(*connectedClient.at(connectedClientId)->first))
 				{
-					connectedClient.at(connectedClientId)->second = serverStart.getElapsedTime();
+					connectedClient.at(connectedClientId)->second = serverStart.getElapsedTime() + sf::milliseconds(sf::Int32(timeout));
 					// Receive until the peer shuts down the connection
 					size_t bytes_received;
 					//do {
@@ -115,6 +98,7 @@ void TCPServor::start()
 			}
 		}
 	}
+	f.join();
 }
 
 void TCPServor::setLogger(Logger* logger)
@@ -154,8 +138,35 @@ void TCPServor::setWaitTime(unsigned int waitTime)
 
 void TCPServor::removeConnectedClient(std::vector<std::pair<sf::TcpSocket*, sf::Time>*>* connectedClient, sf::SocketSelector* selector, size_t i)
 {
+	this->subLogger->log(LoggerGravity::DEBUG, "remove connected client id:" + i);
 	connectedClient->at(i)->first->disconnect();
 	selector->remove(*connectedClient->at(i)->first);
 	delete connectedClient->at(i);
 	connectedClient->erase(connectedClient->begin() + i);
+}
+
+void TCPServor::newClientAcceptThread()
+{
+	sf::TcpSocket* client = nullptr;
+	while (!this->tCPServorControler.isClosingServor())
+	{
+		if (client == nullptr)
+			client = new sf::TcpSocket();
+		// Wait for a client to connect
+		switch (listener.accept(*client))
+		{
+		case sf::Socket::NotReady:
+			//no
+			break;
+		case sf::Socket::Error:
+			this->getSublogger()->log(ERROR, "Failed to accept connection");
+			break;
+		case sf::Socket::Done:
+			this->subLogger->log(LoggerGravity::DEBUG, "new connection id:" + connectedClient.size());
+			selector.add(*client);
+			connectedClient.push_back(new std::pair<sf::TcpSocket*, sf::Time>(client, serverStart.getElapsedTime() + sf::milliseconds(sf::Int32(this->timeout))));
+			client = nullptr;
+			break;
+		}
+	}
 }
